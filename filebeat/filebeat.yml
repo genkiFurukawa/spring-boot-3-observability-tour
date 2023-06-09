@@ -1,0 +1,16 @@
+filebeat.inputs:
+  - type: filestream
+    id: jsug-seminar-2023-02
+    enabled: true
+    paths:
+      - /var/log/payment-gateway/*.log
+      - /var/log/qr-service/*.log
+      - /var/log/credit-service/*.log
+      - /var/log/log-ingester/*.log
+    parsers:
+      - ndjson:
+        overwrite_keys: true
+        add_error_key: true
+        expand_keys: true
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]

@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.17.10
+    container_name: filebeat
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      # 環境に合わせて変更する
+      - /Users/genki/Documents/git/java/jsug-seminar-2023-02/payment-gateway/log:/var/log/payment-gateway:ro
+      - /Users/genki/Documents/git/java/jsug-seminar-2023-02/qr-service/log:/var/log/qr-service:ro
+      - /Users/genki/Documents/git/java/jsug-seminar-2023-02/credit-service/log:/var/log/credit-service:ro
+      - /Users/genki/Documents/git/java/jsug-seminar-2023-02/log-ingester/log:/var/log/log-ingester:ro
+    command: filebeat -e -strict.perms=false
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch-data:
+    driver: local
