@@ -40,4 +40,15 @@ $ docker-compose stop
 ## 参考
 
 - [《滅びの呪文》Docker Compose で作ったコンテナ、イメージ、ボリューム、ネットワークを一括完全消去する便利コマンド](https://qiita.com/suin/items/19d65e191b96a0079417)
+
   - Elastic Stack の 8 系から 7 系にするときにボリュームのファイルの影響かミドルウェアが起動しなくなったので、ここを参考に一括削除した
+
+- コンテナからホスト上のサービスに対して接続したい
+
+  - Prometheus のサーバからホストマシンのアプリケーションに http 通信でメトリクスを取得したい
+  - https://docs.docker.jp/docker-for-mac/networking.html#mac-i-want-to-connect-from-a-container-to-a-service-on-the-host
+
+- Prometheus で収集したメトリクスを Grafana で見る時の参考
+  - まずは「JVM (Micrometer)」(ID: 4701)を使ってみるとよさそう
+    - その他: https://grafana.com/grafana/dashboards/?search=Spring+Boot
+  - https://cero-t.hatenadiary.jp/entry/2023/01/11/181715

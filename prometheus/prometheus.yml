@@ -1,0 +1,28 @@
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: "payment-gateway"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["host.docker.internal:8080"]
+        labels:
+          application: "payment-gateway"
+  - job_name: "credit-service"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["host.docker.internal:8090"]
+        labels:
+          application: "credit-service"
+  - job_name: "qr-service"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["host.docker.internal:8091"]
+        labels:
+          application: "qr-servicey"
+  - job_name: "log-ingester"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["host.docker.internal:8070"]
+        labels:
+          application: "log-ingester"
