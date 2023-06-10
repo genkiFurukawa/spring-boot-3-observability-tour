@@ -55,11 +55,12 @@ services:
       - 3000:3000
 
   zipkin:
-    image: openzipkin/zipkin:2
+    # 2.24だとSTORAGE_TYPE=elasticsearchにすると、起動できないので2.22.0
+    image: openzipkin/zipkin:2.22.0
     container_name: zipkin
-    # environment:
-    #   - STORAGE_TYPE=elasticsearch
-    #   - ES_HOSTS=http://elasticsearch:9200
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=elasticsearch:9200
     ports:
       - 9411:9411
     depends_on:

@@ -18,10 +18,12 @@
 
 1. [GitHub](https://github.com/hainet50b/jsug-seminar-2023-02)をクローンし、フォルダごとに（`payment-gateway`・`qr-service`・`credit-service`・`log-ingester`の 4 つ） InteliJ で開き、アプリを起動する
    - M1 Mac の時は`netty-resolver-dns-native-macos`の依存を追加する
-1. `ssrc/main/java/com/programacho/paymentgateway/PaymentGatewayController.java`を修正する
+1. `ssrc/main/java/com/programacho/paymentgateway/PaymentGatewayController.java`を修正する（74 行目、122 行目、127 行目）
    ```java
    # errorCodeがnullの時に落ちてしまうので、nullの時は空文字を入れるようにして暫定対処する
    MDC.put("labels.payment.error-code", response.errorCode() != null ? response.errorCode() : "");
+   MDC.put("labels.payment.error-code", response.errorCode() != null ? response.errorCode() : "");
+   MDC.put("labels.payment-gateway.error-code", response.errorCode() != null ? response.errorCode() : "");
    ```
 1. ログの出力場所をメモしておく（ミドルウェア側を動かす時に使う）
 
