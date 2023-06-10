@@ -17,6 +17,12 @@
 ### アプリ側
 
 1. [GitHub](https://github.com/hainet50b/jsug-seminar-2023-02)をクローンし、フォルダごとに（`payment-gateway`・`qr-service`・`credit-service`・`log-ingester`の 4 つ） InteliJ で開き、アプリを起動する
+   - M1 Mac の時は`netty-resolver-dns-native-macos`の依存を追加する
+1. `ssrc/main/java/com/programacho/paymentgateway/PaymentGatewayController.java`を修正する
+   ```java
+   # errorCodeがnullの時に落ちてしまうので、nullの時は空文字を入れるようにして暫定対処する
+   MDC.put("labels.payment.error-code", response.errorCode() != null ? response.errorCode() : "");
+   ```
 1. ログの出力場所をメモしておく（ミドルウェア側を動かす時に使う）
 
 ### ミドルウェア側
@@ -49,6 +55,19 @@ $ docker-compose stop
   - https://docs.docker.jp/docker-for-mac/networking.html#mac-i-want-to-connect-from-a-container-to-a-service-on-the-host
 
 - Prometheus で収集したメトリクスを Grafana で見る時の参考
+
   - まずは「JVM (Micrometer)」(ID: 4701)を使ってみるとよさそう
     - その他: https://grafana.com/grafana/dashboards/?search=Spring+Boot
   - https://cero-t.hatenadiary.jp/entry/2023/01/11/181715
+
+- M1 Mac で Spring Boot 実行時に発生する Netty エラーを抑える方法
+  - https://tech.excite.co.jp/entry/2022/09/30/201343
+  - SpringBoot の各アプリの pom.xml に下記を追加する
+  ```
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver-dns-native-macos</artifactId>
+      <version>4.1.93.Final</version>
+      <classifier>osx-aarch_64</classifier>
+    </dependency>
+  ```
