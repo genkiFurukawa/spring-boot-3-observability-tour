@@ -54,6 +54,17 @@ services:
     ports:
       - 3000:3000
 
+  zipkin:
+    image: openzipkin/zipkin:2
+    container_name: zipkin
+    # environment:
+    #   - STORAGE_TYPE=elasticsearch
+    #   - ES_HOSTS=http://elasticsearch:9200
+    ports:
+      - 9411:9411
+    depends_on:
+      - elasticsearch
+
 volumes:
   elasticsearch-data:
     driver: local
